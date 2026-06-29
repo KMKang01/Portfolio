@@ -18,7 +18,7 @@ import {
   ChevronRight
 } from 'lucide-vue-next';
 
-const profileImage = new URL('./static/images/profile/IMG_5490-25 (일반사진).jpg', import.meta.url).href;
+const profileImage = new URL('./static/images/profile/profile_image.jpg', import.meta.url).href;
 const fillyImages = {
   main: new URL('./static/images/filly-images/main.png', import.meta.url).href,
   systemArchitecture: new URL('./static/images/filly-images/system_architecture.png', import.meta.url).href,
