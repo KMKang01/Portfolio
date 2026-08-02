@@ -51,7 +51,7 @@ const projects = [
       'GCP Bucket 기반 이미지 저장 및 Signed URL 접근 처리',
       'GCP Cloud Run 기반 백엔드 배포와 프론트엔드 배포 환경 구성'
     ],
-    problem: '메인 페이지에서 여러 이미지 조회 시 Signed URL을 반복 생성하며\n 로딩이 지연되는 문제가 발생했습니다.',
+    problem: '메인 페이지에서 여러 이미지 조회 시 Signed URL을 반복 생성하며 로딩이 지연되는 문제가 발생했습니다.',
     solution: 'Caffeine Cache를 적용해 Signed URL을 캐싱하고, 최초 생성 시 병렬 처리를 적용해 불필요한 오버헤드를 줄였습니다. 프로젝트 규모와 단일 서버 운영 환경을 고려해 Redis 대신 애플리케이션 내부 캐시를 선택했습니다.',
     links: [
       { label: 'GitHub', url: 'https://github.com/hansung-2026-capstone', icon: Github },
