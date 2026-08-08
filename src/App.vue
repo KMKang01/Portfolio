@@ -185,9 +185,6 @@ onUnmounted(() => {
               <span>
                 <UserRound /> 남자
               </span>
-              <span>
-                <ShieldCheck /> 군필
-              </span>
             </div>
           </div>
         </div>
