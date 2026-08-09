@@ -2,7 +2,6 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import {
   Mail,
-  Calendar,
   Server,
   Database,
   Cloud,
@@ -10,7 +9,6 @@ import {
   Code2,
   Github,
   Youtube,
-  UserRound,
   ShieldCheck,
   GraduationCap,
   BadgeCheck,
@@ -42,19 +40,23 @@ const projects = [
   {
     title: 'Filly — AI 일기 생성 서비스',
     period: '2026.03 ~ 2026.06',
-    role: '팀장 / 백엔드 / 인프라 담당',
-    stack: ['Spring Boot', 'MySQL', 'GCP Cloud Run', 'Firebase Hosting', 'React', 'TanStack Query', 'Tailwind CSS', 'Gemini API', 'OAuth'],
+    role: '팀장 / 백엔드 개발 / 인프라 구축',
+    stack: ['Java', 'Spring Boot', 'Spring Security', 'Spring Data JPA', 'MySQL', 'OAuth2', 'JWT', 'Docker', 'Google Cloud Run', 'Cloud SQL', 'Google Cloud Storage', 'Caffeine Cache', 'Gemini API'],
     summary: '사용자가 짧은 문장과 이미지를 기반으로 일기를 쉽게 작성할 수 있도록 돕는 AI 일기 생성 서비스입니다.',
     highlights: [
-      'OAuth 기반 소셜 로그인 및 사용자별 일기 데이터 저장 구조 설계',
-      'Gemini API 연동을 통한 AI 일기 초안 생성 기능 구현',
-      'GCP Bucket 기반 이미지 저장 및 Signed URL 접근 처리',
-      'GCP Cloud Run 기반 백엔드 배포와 프론트엔드 배포 환경 구성'
+      'Naver / Kakao / Google OAuth2 로그인 및 JWT 기반 인증 구현',
+      'Spring Data JPA 기반 사용자 및 일기 데이터 처리, REST API 개발',
+      'Google Cloud Storage 이미지를 비공개로 관리하고 Signed URL 기반 이미지 접근 제어 구현',
+      'Docker 기반 Spring Boot 애플리케이션을 Google Cloud Run에 배포'
     ],
-    problem: '메인 페이지에서 여러 이미지 조회 시 Signed URL을 반복 생성하며 로딩이 지연되는 문제가 발생했습니다.',
-    solution: 'Caffeine Cache를 적용해 Signed URL을 캐싱하고, 최초 생성 시 병렬 처리를 적용해 불필요한 오버헤드를 줄였습니다. 프로젝트 규모와 단일 서버 운영 환경을 고려해 Redis 대신 애플리케이션 내부 캐시를 선택했습니다.',
+    problem: '메인 페이지에서 일기 약 10개와 이미지 약 30개를 조회할 때 Signed URL 생성이 반복되어 최초 로딩이 약 12초까지 지연됐습니다.',
+    solution: 'Signed URL 유효기간 1시간에 맞춰 Caffeine Cache TTL을 50분, maximumSize를 10,000으로 설정했습니다. 반복 요청은 캐시의 Signed URL을 재사용하고, 최초 캐시 미스는 CompletableFuture + ExecutorService로 여러 Signed URL을 병렬 생성했습니다.',
+    result: '메인 페이지 최초 로딩 약 12초 → 1~2초',
+    cacheDecision: 'Cloud Run은 최대 3개 인스턴스로 확장될 수 있어 local cache가 인스턴스 간 공유되지 않는 한계가 있었지만, Signed URL은 재생성 가능한 파생 데이터이므로 데이터 정합성에 영향을 주지 않는다고 판단했습니다. 별도 Redis 인프라의 운영 복잡도 대비 이점이 제한적이라 Caffeine Cache를 선택했습니다.',
+    aiUsage: '문제와 적용 범위를 먼저 정의한 뒤 AI 코딩 도구(Codex)를 활용해 병렬 처리 구현안을 빠르게 구체화했습니다. 생성된 코드는 동작 방식과 기존 서비스 구조의 적합성을 확인한 뒤 적용했습니다.',
+    award: '2026-1 한성대학교 캡스톤디자인 작품우수상',
     links: [
-      { label: 'GitHub', url: 'https://github.com/hansung-2026-capstone', icon: Github },
+      { label: 'Backend GitHub', url: 'https://github.com/hansung-2026-capstone/filly-backend', icon: Github },
       { label: '시연영상', url: 'https://www.youtube.com/watch?v=BMViDPydEdY', icon: Youtube }
     ],
     media: {
@@ -71,17 +73,19 @@ const projects = [
     }
   },
   {
-    title: '천재교육 서비스개발팀 인턴 — 백오피스 OCR 고도화',
+    title: '사내 백오피스 OCR 자동화',
     period: '2025.08 ~ 2025.10',
     role: '서비스개발팀 인턴',
-    stack: ['Spring Boot', 'Thymeleaf', 'MySQL', 'GitLab', 'OpenAI API'],
-    summary: '천재교육 디지털사업본부 서비스개발팀에서 실무 개발 환경과 협업 방식을 경험했습니다.',
+    stack: ['Spring Boot', 'JSP', 'Vue.js', 'MySQL', 'GitLab', 'OpenAI API'],
+    summary: '천재교육 디지털사업본부 서비스개발팀에서 사내 백오피스 OCR 자동화 기능을 개발했습니다.',
     highlights: [
-      '천재교육 백오피스 고도화 작업 참여',
-      'OpenAI API 기반 OCR 처리 기능 담당',
+      'PDF 자동 캡처 로직과 OpenAI API 호출·응답 처리 로직 구현',
+      'OCR 처리용 프롬프트를 설계하고 단계별 처리 지침과 제약조건을 구체화',
+      '수동 캡처 후 영역별 OCR 요청 프로세스를 PDF 전체 캡처와 OCR이 이어지는 자동화 흐름으로 개선',
+      '구현 기능이 인턴 종료 후 실제 사내 백오피스에 반영된 것을 담당 선임을 통해 확인'
     ],
-    problem: '문서 영역이 정형화되어 있지 않아 자동 캡처 정확도가 떨어지고, API 요청 비용과 처리 시간도 함께 고려해야 했습니다.',
-    solution: '프롬프트 제약 조건을 세분화하고 GPT-4o-mini, GPT-4-turbo 등 모델별 결과를 비교하며 정확도와 비용 효율성의 균형을 맞추는 방향으로 개선했습니다.'
+    problem: '사용자가 PDF 영역을 직접 확인·캡처한 뒤 영역별 OCR을 요청해야 했고, 비정형 문서는 결과 편차가 발생했습니다.',
+    solution: 'PDF 전체 캡처와 OCR 요청이 한 번의 기능 실행으로 이어지도록 구현하고, 비정형 문서의 결과 편차를 줄이기 위해 처리 절차·제약조건·가이드라인을 구체화했습니다. GPT-4o 등 모델별 결과도 검토했습니다.'
   },
   {
     title: 'AI 디지털 교과서 클론 프로젝트',
@@ -112,10 +116,12 @@ const projects = [
 ];
 
 const skills = [
-  { icon: Server, label: 'Backend', items: ['Java', 'Spring', 'Spring Data JPA', 'Spring Boot', 'MyBatis'] },
-  { icon: Code2, label: 'Frontend', items: ['Vue.js', 'JSP', 'JavaScript', 'TypeScript'] },
-  { icon: Database, label: 'Database', items: ['MySQL', 'PostgreSQL', 'MongoDB'] },
-  { icon: Cloud, label: 'Infra / DevOps', items: ['AWS EC2', 'GCP Cloud Run', 'Vercel', 'GitHub Actions'] },
+  { icon: Server, label: 'Backend', items: ['Java', 'Spring Boot', 'Spring Security', 'Spring Data JPA', 'MyBatis'] },
+  { icon: Database, label: 'Database', items: ['MySQL'] },
+  { icon: ShieldCheck, label: 'Auth / Security', items: ['OAuth2', 'JWT'] },
+  { icon: Cloud, label: 'Cloud / Infra', items: ['Docker', 'Google Cloud Run', 'Google Cloud Storage', 'Cloud SQL'] },
+  { icon: Sparkles, label: 'AI / API', items: ['OpenAI API', 'Gemini API'] },
+  { icon: Code2, label: 'Tools', items: ['Git', 'GitHub', 'GitLab', 'Swagger', 'IntelliJ IDEA', 'VS Code', 'DBeaver'] },
 ];
 
 const activeMediaIndexes = ref({});
@@ -162,11 +168,11 @@ onUnmounted(() => {
 
     <section id="home" class="hero">
       <div class="hero-text">
-        <p class="tag">Backend / Platform Developer</p>
-        <h1>더 나은 내일을 위해 배우는 <br> 백엔드 개발자</h1>
+        <p class="tag">Backend Developer</p>
+        <h1>문제를 분석하고 개선으로 <br> 증명하는 백엔드 개발자</h1>
         <p class="hero-desc">
-          Spring Boot 기반 백엔드 개발을 중심으로 사용자 데이터 저장, API 연동,<br> 인증, 클라우드 배포,
-          성능 개선 경험을 쌓아왔습니다.
+          Spring Boot 기반 백엔드 개발을 중심으로 실제 업무의 반복 과정을 자동화하고,<br>
+          서비스에서 발생한 성능 병목을 찾아 개선해왔습니다.
         </p>
         <div class="hero-actions">
           <a href="#projects" class="btn primary">프로젝트 보기</a>
@@ -180,10 +186,7 @@ onUnmounted(() => {
             <h3>강경민</h3>
             <div class="basic-info">
               <span>
-                <Calendar /> 2001.07.02
-              </span>
-              <span>
-                <UserRound /> 남자
+                <Server /> Backend Developer
               </span>
             </div>
           </div>
@@ -194,8 +197,9 @@ onUnmounted(() => {
               <GraduationCap /> 교육
             </h4>
             <ul>
-              <li>천재교육 Java 풀스택 10기 · 2024.12 ~ 2025.07</li>
-              <li>한성대학교 컴퓨터공학부 · 2020.03 ~ 재학중</li>
+              <li>한성대학교 IT공과대학</li>
+              <li>모바일소프트웨어트랙 / 웹공학트랙</li>
+              <li>천재교육 서비스개발팀 인턴</li>
             </ul>
           </div>
           <div>
@@ -235,20 +239,22 @@ onUnmounted(() => {
       <div class="section-title">
         <p>EXPERIENCE</p>
         <h2>실무 경험</h2>
-        <span>천재교육 서비스개발팀 인턴으로 실무 개발 환경을 경험했습니다.</span>
+        <span>사내 백오피스의 반복 업무를 자동화하는 기능을 구현했습니다.</span>
       </div>
       <div class="experience-card">
         <div>
           <p class="date">2025.08 ~ 2025.10</p>
-          <h3>천재교육 디지털사업본부 서비스개발팀 인턴</h3>
+          <h3>천재교육 디지털사업본부 서비스개발팀 · 인턴</h3>
           <p>
-            Vue.js와 Spring Boot 기반 클래스보드 클론 프로젝트를 진행했고, <br> 백오피스 고도화 작업에서 OpenAI API 기반 OCR 처리 기능을 담당했습니다.
+            Spring Boot, JSP, Vue.js, MySQL, GitLab, OpenAI API를 사용해<br>
+            사내 백오피스 OCR 자동화 기능을 개발했습니다.
           </p>
         </div>
         <ul>
-          <li>문서 업로드 후 자동 캡처 및 OCR 처리 흐름 구현 참여</li>
-          <li>프롬프트 제약 조건 설계 및 모델별 결과 비교</li>
-          <li>AI API 연동 시 정확도, 처리 시간, 비용 효율성 고려</li>
+          <li>PDF 자동 캡처, OpenAI API 호출 및 응답 처리 로직 구현</li>
+          <li>수동 캡처·영역별 OCR 요청을 PDF 전체 자동 캡처·OCR 흐름으로 개선</li>
+          <li>단계별 처리 지침과 제약조건을 구체화하고 GPT-4o 등 모델별 결과 검토</li>
+          <li>구현 기능이 인턴 종료 후 실제 사내 백오피스에 반영된 것을 담당 선임을 통해 확인</li>
         </ul>
       </div>
     </section>
@@ -257,7 +263,6 @@ onUnmounted(() => {
       <div class="section-title">
         <p>PROJECTS</p>
         <h2>주요 프로젝트</h2>
-        <!-- <span>AiTStory 플랫폼 개발 직무와 연결되는 프로젝트 중심으로 정리했습니다.</span> -->
       </div>
       <div class="project-list">
         <article class="project-card" v-for="(project, idx) in projects" :key="project.title">
@@ -310,6 +315,10 @@ onUnmounted(() => {
               <h4>문제 해결</h4>
               <p><strong>문제:</strong> {{ project.problem }}</p>
               <p><strong>해결:</strong> {{ project.solution }}</p>
+              <p v-if="project.result" class="performance-result"><strong>결과:</strong> {{ project.result }}</p>
+              <p v-if="project.cacheDecision"><strong>캐시 선택:</strong> {{ project.cacheDecision }}</p>
+              <p v-if="project.aiUsage"><strong>AI 코딩 도구 활용:</strong> {{ project.aiUsage }}</p>
+              <p v-if="project.award" class="award"><strong>수상:</strong> {{ project.award }}</p>
             </div>
           </div>
         </article>
@@ -317,10 +326,9 @@ onUnmounted(() => {
     </section>
 
     <section id="contact" class="contact">
-      <h2>사용자 데이터 기반 플랫폼 개발에 기여하고 싶습니다.</h2>
+      <h2>문제를 발견하고 개선으로 증명하는 백엔드 개발자가 되겠습니다.</h2>
       <p>
-        Spring Boot 기반 API 개발, AI API 연동, 인증, 클라우드 배포, 성능 개선 경험을 바탕으로
-        안정적인 플랫폼 개발자가 되겠습니다.
+        Spring Boot 기반 API 개발과 AI 기술을 활용해 반복되는 업무를 더 효율적인 시스템으로 바꾸겠습니다.
       </p>
       <div class="contact-links">
         <a href="mailto:wowkmini@naver.com">

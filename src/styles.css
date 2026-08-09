@@ -177,7 +177,7 @@ h1 {
 .section-title span { display: block; margin-top: 10px; color: var(--muted); }
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 .skill-card, .project-card, .experience-card {
@@ -344,6 +344,15 @@ li { margin: 8px 0; }
   border: 1px solid var(--line);
 }
 .problem-box p { margin: 0 0 12px; color: var(--muted); }
+.problem-box .performance-result {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--soft);
+  color: var(--primary-dark);
+  font-size: 17px;
+  font-weight: 800;
+}
+.problem-box .award { color: var(--primary-dark); font-weight: 700; }
 .contact {
   margin: 84px clamp(20px, 6vw, 84px);
   padding: 56px;
