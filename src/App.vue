@@ -144,11 +144,8 @@ const closeImage = () => {
     <section id="home" class="hero site-frame">
       <div class="hero-text">
         <p class="tag">Backend Developer</p>
-        <h1>문제를 분석하고 개선으로 <br> 증명하는 백엔드 개발자</h1>
-        <p class="hero-desc">
-          Spring Boot 기반 백엔드 개발을 중심으로 실제 업무의 반복 과정을 자동화하고,<br>
-          서비스에서 발생한 성능 병목을 찾아 개선해왔습니다.
-        </p>
+        <h1 class="hero-title"><span>문제를 분석하고 개선으로</span><span>증명하는 백엔드 개발자</span></h1>
+        <p class="hero-desc"><span>Spring Boot 기반 백엔드 개발을 중심으로</span><span>실제 업무의 반복 과정을 자동화하고,</span><span>서비스에서 발생한 성능 병목을 찾아 개선해왔습니다.</span></p>
         <div class="hero-actions">
           <a href="#projects" class="hero-primary-action">프로젝트 보기</a>
           <a href="https://github.com/KMKang01" class="hero-github-link" target="_blank" rel="noopener noreferrer"><Github /><span>GitHub</span><span aria-hidden="true">↗</span></a>
@@ -189,11 +186,8 @@ const closeImage = () => {
       <div class="experience-card">
         <div>
           <p class="date">2025.08 ~ 2025.10</p>
-          <h3>천재교육<br>서비스개발팀 인턴</h3>
-          <p>
-            Spring Boot, JSP, Vue.js, MySQL, GitLab, OpenAI API를 사용해<br>
-            사내 백오피스 OCR 자동화 기능을 개발했습니다.
-          </p>
+          <h3 class="experience-title"><span>천재교육</span><span>서비스개발팀 인턴</span></h3>
+          <p class="experience-description"><span>Spring Boot, JSP, Vue.js, MySQL,</span><span>GitLab, OpenAI API를 사용해</span><span>사내 백오피스 OCR 자동화 기능을 개발했습니다.</span></p>
         </div>
         <ul>
           <li>PDF 자동 캡처, OpenAI API 호출 및 응답 처리 로직 구현</li>
@@ -308,7 +302,7 @@ const closeImage = () => {
         <div>
           <p class="print-eyebrow">BACKEND DEVELOPER PORTFOLIO</p>
           <h1>문제를 분석하고 개선으로<br>증명하는 백엔드 개발자</h1>
-          <p>Spring Boot 기반 백엔드 개발을 중심으로 실제 업무의 반복 과정을 자동화하고, 서비스에서 발생한 성능 병목을 찾아 개선해왔습니다.</p>
+          <p>Spring Boot 기반 백엔드 개발을 중심으로<br> 실제 업무의 반복 과정을 자동화하고, <br>서비스에서 발생한 성능 병목을 찾아 개선해왔습니다.</p>
         </div>
         <div class="print-profile-card">
           <img :src="profileImage" alt="강경민 프로필 사진" />
